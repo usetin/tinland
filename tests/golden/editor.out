@@ -1,0 +1,189 @@
+--- sample.txt row 4 col 11 dirty true
+package main
+
+fn main() {
+	let y = 2
+	let x = 1
+	say.Line(x)
+}
+
+--- sample.txt row 4 col 2 dirty true
+package main
+
+fn main() {
+	
+	let x = 1
+	say.Line(x)
+}
+
+--- sample.txt row 4 col 14 dirty true
+package main
+
+fn main() {
+	// let y = 2
+	let x = 1
+	say.Line(x)
+}
+
+--- sample.txt row 4 col 14 dirty true
+package main
+
+fn main() {
+	// let y = 2
+	// let y = 2
+	let x = 1
+	say.Line(x)
+}
+
+prompt: 1 say 
+--- sample.txt row 7 col 5 dirty true
+selection: say
+package main
+
+fn main() {
+	// let y = 2
+	// let y = 2
+	let x = 1
+	say.Line(x)
+}
+
+--- sample.txt row 2 col 1 dirty true
+package main
+
+fn main() {
+	// let y = 2
+	// let y = 2
+	let x = 1
+	say.Line(x)
+}
+
+--- sample.txt row 1 col 1 dirty true
+
+--- sample.txt row 16 col 1 dirty true
+selection: }
+
+package main
+
+fn main() {
+	// let y = 2
+	// let y = 2
+	let x = 1
+	say.Line(x)
+}
+package main
+
+fn main() {
+	// let y = 2
+	// let y = 2
+	let x = 1
+	say.Line(x)
+}
+
+--- sample.txt row 1 col 1 dirty true
+let yy = 1
+say.Line(yy)
+let é = "ü"
+--- sample.txt row 1 col 1 dirty true
+let yy = 1
+say.Line(yy)
+let é = "ü"
+--- untitled row 1 col 8 dirty true
+scratch
+--- sample.txt row 1 col 1 dirty true
+let yy = 1
+say.Line(yy)
+let é = "ü"
+output: true
+-- run.tin: exit 0
+run from the editor 42
+jumped: true
+--- sample.txt row 3 col 5 dirty true
+let yy = 1
+say.Line(yy)
+let é = "ü"
+diag: 1 1 1 9 E001 edition 1 files start with a package declaration
+diags: 1
+info: E001 edition 1 files start with a package declaration | Fix: start the file with `package main` (or the package's name), and keep only one.
+diags: 0
+--- run.tin row 9 col 12 dirty true
+package main
+
+import "say"
+
+fn main() {
+	say.Line("run from the editor", 6 * 7)
+}
+
+let z = 2, 3
+
+--- run.tin row 9 col 12 dirty true
+package main
+
+import "say"
+
+fn main() {
+	say.Line("run from the editor", 6 * 7)
+}
+
+  let z=2,3
+diags: 0
+--- nav.tin row 7 col 4 dirty false
+package main
+
+import "say"
+import "twine"
+
+// helper doubles its argument.
+fn helper(x i64) i64 {
+	return x * 2
+}
+
+fn main() {
+	let parts = twine.Split("a,b", ",")
+	say.Line(helper(21), len(parts))
+}
+
+info: fn helper(x i64) i64 | helper doubles its argument.
+--- nav.tin row 13 col 13 dirty false
+package main
+
+import "say"
+import "twine"
+
+// helper doubles its argument.
+fn helper(x i64) i64 {
+	return x * 2
+}
+
+fn main() {
+	let parts = twine.Split("a,b", ",")
+	say.Line(helper(21), len(parts))
+}
+
+complete Split true true
+complete Join true true
+complete NoSuchName false true
+complete Join true true
+--- nav.tin row 14 col 13 dirty true
+package main
+
+import "say"
+import "twine"
+
+// helper doubles its argument.
+fn helper(x i64) i64 {
+	return x * 2
+}
+
+fn main() {
+	let parts = twine.Split("a,b", ",")
+	say.Line(helper(21), len(parts))
+		twine.Join
+}
+
+in twine.tin
+at nav.tin 12 22
+budget render ok
+budget type ok
+budget scroll ok
+message: opened toolchain/compiler/lower.tin
