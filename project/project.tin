@@ -3,7 +3,7 @@
 // entries and matches out.
 package project
 
-import "../../tit/ignore"
+import "../tit/ignore"
 import "quarry"
 import "say"
 import "trail"

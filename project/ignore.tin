@@ -1,6 +1,6 @@
 package project
 
-import "../../tit/ignore"
+import "../tit/ignore"
 import "twine"
 
 // loadRules reads the folder's ignore rules with tit's ignore package (git's rules: negation, `**`, classes, the
