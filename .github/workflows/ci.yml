@@ -31,6 +31,12 @@ jobs:
           repository: usetin/tin
           path: tin
           persist-credentials: false
+      - name: Check out tit (project/ imports its ignore rules)
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          repository: usetin/tit
+          path: tit
+          persist-credentials: false
       - name: Build the compiler from the checked-in seed
         run: make -C tin bin/tinc
       - name: Tinland tests

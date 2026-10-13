@@ -17,7 +17,8 @@ language/         what Tinland knows about Tin: finding tin, tinc and tit, askin
 tests/            scripts, fixtures and golden output for the macOS tests (run.sh)
 vscode/           the VS Code extension (separate, not part of the application)
 
-The packages it imports (in the tin repository, usetin/tin: packages/ and toolchain/std/):
+The packages it imports (usetin/tin: `packages/` and `toolchain/std/`; `project/` also imports tit's ignore
+rules from a `tit/` checkout of usetin/tit):
 appkit/           the macOS binding: windows, events, menus, panels, the clipboard, Objective-C classes defined from Tin
 metal/            the Metal binding and the GPU canvas the UI framework draws on                                   (planned)
 textedit/         the text buffer engine and the Tin syntax highlighter (no UI, no operating system)

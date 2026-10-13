@@ -9,12 +9,14 @@ and toolchain (compiler `tinc`, runtime, standard library, packages) are in
 
 ```sh
 git clone git@github.com:usetin/tin.git ../tin   # or anywhere: TIN=/path/to/tin
+git clone git@github.com:usetin/tit.git tit      # project/ imports tit's ignore rules relatively
 make build        # bin/tinland (macOS)
 make test         # the suite: portable parts everywhere, editor and window on macOS
 ```
 
 - `TIN` (Makefile) or `TIN_ROOT` (test scripts) point at the tin checkout; `../tin` is the default.
-  The tin checkout builds `bin/tinc` from its checked-in seed, no Go or cc.
+  The tin checkout builds `bin/tinc` from its checked-in seed, no Go or cc. The tit checkout must be
+  `tit/` inside this repository: `project/` imports `tit/ignore` relatively.
 - Tinland runs on macOS only. Linux CI runs the portable parts (ui layout, project ranking,
   terminal screen); the editor, window snapshots and GPU tests run on macOS.
 - The VS Code extension lives in `vscode/`; its tests are `npm ci && npm test` there, with
