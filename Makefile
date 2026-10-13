@@ -13,6 +13,7 @@ TINC := $(TIN)/bin/tinc
 all: build
 
 build: $(TINC)
+	@mkdir -p bin
 	$(TIN)/tin build main.tin -o bin/tinland
 
 # A bundle with its own Dock icon and name in the menu bar (macOS).
