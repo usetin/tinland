@@ -1,16 +1,18 @@
 #!/bin/sh
 # Tinland's tests. The UI framework's layout (tests/programs/ui_layout.tin) is portable and runs everywhere; on macOS the
 # editor driven by a script, without a window (tests/scripts/editor.script), must print what tests/golden/editor.out holds and
-# write a PNG of its pixels. Usage: run.sh [COMPILER]
+# write a PNG of its pixels. Usage: run.sh [COMPILER]; TIN_ROOT is a tin checkout (default ../tin).
 set -eu
-cd "$(dirname "$0")/../../.." || exit 1
-compiler=${1:-bin/tinc}
+cd "$(dirname "$0")/.." || exit 1
+tin_root=${TIN_ROOT:-../tin}
+tin_root=$(cd "$tin_root" && pwd)
+compiler=${1:-$tin_root/bin/tinc}
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT HUP INT TERM
 for name in ui_layout project terminal; do
-	"$compiler" -o "$tmp/$name" "products/tinland/tests/programs/$name.tin"
+	"$compiler" -o "$tmp/$name" "tests/programs/$name.tin"
 	"$tmp/$name" > "$tmp/$name.out"
-	cmp "$tmp/$name.out" "products/tinland/tests/golden/$name.out" || { echo "FAIL tinland $name"; exit 1; }
+	cmp "$tmp/$name.out" "tests/golden/$name.out" || { echo "FAIL tinland $name"; exit 1; }
 	echo "PASS tinland $name"
 done
 if [ "$(uname -s)" != Darwin ]; then
@@ -18,21 +20,21 @@ if [ "$(uname -s)" != Darwin ]; then
 	exit 0
 fi
 for name in workspace_logic settings toolchain; do
-	"$compiler" -o "$tmp/$name" "products/tinland/tests/programs/$name.tin"
+	"$compiler" -o "$tmp/$name" "tests/programs/$name.tin"
 	"$tmp/$name" > "$tmp/$name.out"
-	cmp "$tmp/$name.out" "products/tinland/tests/golden/$name.out" || { echo "FAIL tinland $name"; exit 1; }
+	cmp "$tmp/$name.out" "tests/golden/$name.out" || { echo "FAIL tinland $name"; exit 1; }
 	echo "PASS tinland $name"
 done
-"$compiler" -o "$tmp/tinland" products/tinland/main.tin
-script=$(sed "s|@PNG@|$tmp/editor.png|" products/tinland/tests/scripts/editor.script)
+"$compiler" -o "$tmp/tinland" main.tin
+script=$(sed "s|@PNG@|$tmp/editor.png|" tests/scripts/editor.script)
 case $compiler in /*) tinc=$compiler ;; *) tinc=$PWD/$compiler ;; esac
 TINLAND_TINC="$tinc" TINLAND_SCRIPT="$script" "$tmp/tinland" > "$tmp/editor.out"
-cmp "$tmp/editor.out" products/tinland/tests/golden/editor.out || { echo "FAIL darwin editor"; exit 1; }
+cmp "$tmp/editor.out" tests/golden/editor.out || { echo "FAIL darwin editor"; exit 1; }
 [ "$(head -c 4 "$tmp/editor.png" | od -An -c | tr -d ' ')" = '211PNG' ] || { echo "FAIL darwin editor snapshot"; exit 1; }
 echo "PASS darwin editor"
 # the whole window on the GPU: a PNG of it (skipped on a machine without a GPU)
-"$compiler" -o "$tmp/workspace_snapshot" products/tinland/tests/programs/workspace_snapshot.tin
-"$tmp/workspace_snapshot" products/tinland/tests/fixtures products/tinland/tests/fixtures/sample.txt "$tmp/workspace.png" > "$tmp/workspace_snapshot.out"
+"$compiler" -o "$tmp/workspace_snapshot" tests/programs/workspace_snapshot.tin
+"$tmp/workspace_snapshot" tests/fixtures tests/fixtures/sample.txt "$tmp/workspace.png" > "$tmp/workspace_snapshot.out"
 if head -1 "$tmp/workspace_snapshot.out" | grep -q '^no gpu'; then
 	echo "SKIP tinland window snapshot: $(head -1 "$tmp/workspace_snapshot.out")"
 else
@@ -41,11 +43,11 @@ else
 	echo "PASS tinland window snapshot"
 fi
 # a real language server (gopls), when one is installed: the client completes and gets diagnostics
-"$compiler" -o "$tmp/lsp" products/tinland/tests/programs/lsp.tin
+"$compiler" -o "$tmp/lsp" tests/programs/lsp.tin
 "$tmp/lsp" > "$tmp/lsp.out"
 if head -1 "$tmp/lsp.out" | grep -q '^no gopls'; then
 	echo "SKIP tinland lsp: $(head -1 "$tmp/lsp.out")"
 else
-	cmp "$tmp/lsp.out" products/tinland/tests/golden/lsp.out || { echo "FAIL tinland lsp"; exit 1; }
+	cmp "$tmp/lsp.out" tests/golden/lsp.out || { echo "FAIL tinland lsp"; exit 1; }
 	echo "PASS tinland lsp"
 fi

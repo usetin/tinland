@@ -8,9 +8,13 @@ with the panel buttons, a command palette and a project search, drawn on the GPU
 development tool, and Linux is the deployment platform for servers, not for this.
 
 ```
-bin/tinc -o tinland products/tinland/main.tin
-./tinland [folder or file...]
+make build        # builds ../tin/bin/tinc when needed, then the editor into bin/tinland
+./bin/tinland [folder or file...]
 ```
+
+The toolchain (the `tinc` compiler, the runtime, the standard library and the packages) lives in
+[usetin/tin](https://github.com/usetin/tin); `TIN=/path/to/tin` points the Makefile at a checkout
+that is not `../tin`.
 
 For an application with its own Dock icon and name in the menu bar, `tools/dev/tinland_app.sh` builds `bin/Tinland.app`
 (`open -a bin/Tinland.app --args /path/to/folder`). The icon (a copper T with a text caret on slate, `icon/Tinland.icns`) is drawn by
@@ -66,8 +70,9 @@ Tinland puts the Tin toolchain first in PATH for everything it starts: the termi
 the language servers. An application opened from the Finder or the Dock gets only `/usr/bin:/bin:/usr/sbin:/sbin`, so Tinland
 started that way first asks the login shell for the user's PATH. The tree it uses is the first of: the one `$TINLAND_TINC`
 belongs to, the open folder when it is a Tin checkout, `$TIN_ROOT`, the tree of the `tin` (or `tinc`) on the PATH, `~/.tin`, and
-the tree Tinland was built in. In a tree with tit's source, `tit` is built into the tree's `bin/` the first time it is used and
-again when the compiler or its source changed; otherwise it is the `tit` on the PATH or in `~/.tin/bin`.
+the tree Tinland was built in. In a Tin tree that also holds tit's source (a tree from before the repositories were split),
+`tit` is built into the tree's `bin/` the first time it is used and again when the compiler or its source changed; otherwise
+it is the `tit` on the PATH or in `~/.tin/bin`.
 
 ## Without a window
 

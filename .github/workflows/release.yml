@@ -1,0 +1,59 @@
+name: Release
+
+# Tags v* publish Tinland-VERSION-darwin-arm64.zip (macOS), built from the tag with the
+# tin toolchain's main branch. Dispatch with an existing tag to rebuild a release.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to release
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  app:
+    name: Tinland.app
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+          persist-credentials: false
+      - name: Check out the tin toolchain
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          repository: usetin/tin
+          path: tin
+          persist-credentials: false
+      - name: Build the compiler from the checked-in seed
+        run: make -C tin bin/tinc
+      - name: Build Tinland.app and the release archive
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          version=${TAG#v}
+          VERSION="$version" tools/dev/tinland_app.sh bin/app
+          mkdir -p bin/dist
+          zip_name="Tinland-$version-darwin-arm64.zip"
+          (cd bin/app && ditto -c -k --keepParent Tinland.app "../dist/$zip_name")
+          (cd bin/dist && shasum -a 256 "$zip_name" > "$zip_name.sha256")
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" bin/dist/Tinland-*.zip bin/dist/Tinland-*.zip.sha256 --clobber
+          else
+            gh release create "$TAG" bin/dist/Tinland-*.zip bin/dist/Tinland-*.zip.sha256 --title "Tinland $TAG" --generate-notes
+          fi
