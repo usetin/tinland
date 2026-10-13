@@ -7,24 +7,23 @@ what, so the product can grow (a project panel, search, a terminal, extensions) 
 ## The packages
 
 ```
-products/tinland/
-  main.tin        package main: the entry point; reads the command line and starts the app
-  app/            the application: the window loop, the menu bar, the application's settings
-  workspace/      what a window holds: title bar, docks (the project panel), panes with tabs, the status bar   (planned)
-  editor/         the text editor: a buffer, its view, selections, completion, diagnostics, commands
-  project/        folders: the file tree, ignore rules, project-wide search                                       (planned)
-  ui/             the UI framework: geometry, colors, text, a tree of elements, layout, input, focus, themes      (planned)
-  language/       what Tinland knows about Tin: finding tin, tinc and tit, asking tinc for declarations and errors, building, running, formatting
-  tests/          scripts, fixtures and golden output for the macOS tests (run.sh)
-  vscode/         the VS Code extension (separate, not part of the application)
+main.tin          package main: the entry point; reads the command line and starts the app
+app/              the application: the window loop, the menu bar, the application's settings
+workspace/        what a window holds: title bar, docks (the project panel), panes with tabs, the status bar   (planned)
+editor/           the text editor: a buffer, its view, selections, completion, diagnostics, commands
+project/          folders: the file tree, ignore rules, project-wide search                                       (planned)
+ui/               the UI framework: geometry, colors, text, a tree of elements, layout, input, focus, themes      (planned)
+language/         what Tinland knows about Tin: finding tin, tinc and tit, asking tinc for declarations and errors, building, running, formatting
+tests/            scripts, fixtures and golden output for the macOS tests (run.sh)
+vscode/           the VS Code extension (separate, not part of the application)
 
-packages/
-  appkit/         the macOS binding: windows, events, menus, panels, the clipboard, Objective-C classes defined from Tin
-  metal/          the Metal binding and the GPU canvas the UI framework draws on                                   (planned)
-  textedit/       the text buffer engine and the Tin syntax highlighter (no UI, no operating system)
-  tinsym/         the compiler's declarations and errors, name resolution and completion (shared with tin lsp)
-  tinjson/        a JSON reader and writer
-  tinfmt/         the whitespace formatter (shared with tin fmt)
+The packages it imports (in the tin repository, usetin/tin: packages/ and toolchain/std/):
+appkit/           the macOS binding: windows, events, menus, panels, the clipboard, Objective-C classes defined from Tin
+metal/            the Metal binding and the GPU canvas the UI framework draws on                                   (planned)
+textedit/         the text buffer engine and the Tin syntax highlighter (no UI, no operating system)
+tinsym/           the compiler's declarations and errors, name resolution and completion (shared with tin lsp)
+tinjson/          a JSON reader and writer
+tinfmt/           the whitespace formatter (shared with tin fmt)
 ```
 
 Zed's crates and ours: `gpui` is `ui` over `metal` and `appkit`; `editor`, `project`, `workspace`, `language`, `text` are the
